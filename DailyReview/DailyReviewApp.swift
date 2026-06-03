@@ -11,7 +11,7 @@ import SwiftUI
 struct DailyReviewApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LandingScreenView()
         }
     }
 }
