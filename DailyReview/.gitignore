@@ -1,0 +1,55 @@
+
+# Xcode
+.DS_Store
+build/
+DerivedData/
+
+# User-specific Xcode files
+*.xcuserstate
+xcuserdata/
+
+# Workspace settings
+*.xccheckout
+*.xcscmblueprint
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+# Archives
+*.xcarchive
+
+# Playground
+timeline.xctimeline
+playground.xcworkspace
+
+# Temporary files
+*.swp
+*.tmp
+*.bak
+
+# macOS
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Logs
+*.log
+
+# App files
+
+jsonTemplates/
