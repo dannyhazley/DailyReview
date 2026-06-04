@@ -17,7 +17,12 @@ struct ReviewInputView: View {
                 ForEach(template.sections) { section in
                     SectionView(section: section)
                 }
-            }
+                Button("SAVE"){
+                    
+                }.foregroundStyle(Color.red)
+                    .font(Font.title2).bold()
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }.padding()
         }
     }
     

@@ -28,6 +28,7 @@ struct NestedInputView: View {
                 Button("Add \(field.label)"){
                     
                 }.frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 12)
             }
             else {
                 Constants.errorText("No subfields found")

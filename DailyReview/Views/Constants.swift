@@ -16,7 +16,7 @@ struct Constants{
     static let maxVisibleRows = 5
     
     static func lblText (_ label: String)-> some View{
-        Text(label).font(Font.subheadline).foregroundStyle(.tint)
+        Text(label).font(Font.subheadline.weight(.semibold)).foregroundStyle(.secondary)
     }
     
     static func errorText (_ label: String)-> some View{

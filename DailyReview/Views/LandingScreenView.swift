@@ -8,11 +8,7 @@
 import SwiftUI
 
 struct LandingScreenView: View {
-    let reviewTypes = [
-        ("Daily", "dailyReview"),
-        ("Weekly", "weeklyReview"),
-        ("Monthly", "monthlyReview")
-    ]
+    let reviewTypes = ReviewType.allCases
 
     var body: some View {
         VStack {
@@ -23,12 +19,12 @@ struct LandingScreenView: View {
 
             Spacer()
 
-            ForEach(reviewTypes, id: \.0) { reviewType in
-                NavigationLink("Monthly Review") {
-                    if let template = try? TemplateLoader.loadTemplate(named: "monthlyReview") {
+            ForEach(reviewTypes, id: \.self) { reviewType in
+                NavigationLink("\(reviewType.rawValue) Review") {
+                    if let template = try? TemplateLoader.loadTemplate(named: reviewType.templateName) {
                         ReviewInputView(template: template)
                     } else {
-                        Text("Failed to load monthly review template.")
+                        Text("Failed to load \(reviewType.rawValue.lowercased()) review template.")
                             .foregroundStyle(.red)
                     }
                 }
@@ -43,11 +39,24 @@ struct LandingScreenView: View {
 }
 
 #Preview {
-    LandingScreenView()
+    NavigationStack {
+        LandingScreenView()
+    }
 }
 
 enum ReviewType: String, CaseIterable {
     case daily = "Daily"
     case weekly = "Weekly"
     case monthly = "Monthly"
+    
+    var templateName: String{
+        switch self {
+        case .daily:
+            return "dailyReview"
+        case .weekly:
+            return "weeklyReview"
+        case .monthly:
+            return "monthlyReview"
+        }
+    }
 }

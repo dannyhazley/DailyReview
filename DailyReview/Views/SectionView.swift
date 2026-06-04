@@ -22,15 +22,15 @@ struct SectionView: View {
             
             
             ForEach(section.fields){ field in
-                FieldView(field: field).padding(EdgeInsets(top: 0, leading: 0, bottom: 2, trailing: 0))
+                FieldView(field: field).padding(EdgeInsets(top: 1, leading: 0, bottom: 1, trailing: 0))
             }
             Divider()
-        }.padding()
+        }
     }
     
     
 }
 
 #Preview {
-    SectionView(section: try! TemplateLoader.loadTemplate(named: "monthlyReview").sections.first!)
+    SectionView(section: try! TemplateLoader.loadTemplate(named: "dailyReview").sections.first!)
 }
