@@ -11,7 +11,9 @@ import SwiftUI
 struct DailyReviewApp: App {
     var body: some Scene {
         WindowGroup {
-            LandingScreenView()
+            NavigationStack {
+                LandingScreenView()
+            }
         }
     }
 }

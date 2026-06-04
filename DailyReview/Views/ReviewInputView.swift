@@ -25,5 +25,5 @@ struct ReviewInputView: View {
 }
 
 #Preview {
-    ReviewInputView(template: try! TemplateLoader.loadTemplate(named: "monthlyReview"))
+    ReviewInputView(template: try! TemplateLoader.loadTemplate(named: "dailyReview"))
 }

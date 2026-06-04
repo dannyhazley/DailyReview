@@ -8,29 +8,46 @@
 import SwiftUI
 
 struct LandingScreenView: View {
+    let reviewTypes = [
+        ("Daily", "dailyReview"),
+        ("Weekly", "weeklyReview"),
+        ("Monthly", "monthlyReview")
+    ]
+
     var body: some View {
-        VStack{
+        VStack {
             Text("What do you want to Review?")
-                .font(Font.largeTitle.bold())
+                .font(.largeTitle.bold())
                 .multilineTextAlignment(.center)
-                .foregroundStyle(Color.red)
- 
+                .foregroundStyle(.red)
+
             Spacer()
-            
-            ForEach (["Daily", "Weekly", "Monthly"], id: \.self) {reviewType in
-                Button("\(reviewType) Review"){
-                    
-                }.font(Font.title)
-                    .padding()
-                    .foregroundStyle(Color.primary)
-                    
+
+            ForEach(reviewTypes, id: \.0) { reviewType in
+                NavigationLink("Monthly Review") {
+                    if let template = try? TemplateLoader.loadTemplate(named: "monthlyReview") {
+                        ReviewInputView(template: template)
+                    } else {
+                        Text("Failed to load monthly review template.")
+                            .foregroundStyle(.red)
+                    }
+                }
+                .font(.title)
+                .padding()
             }
-            
+
             Spacer()
-        }.padding()
+        }
+        .padding()
     }
 }
 
 #Preview {
     LandingScreenView()
+}
+
+enum ReviewType: String, CaseIterable {
+    case daily = "Daily"
+    case weekly = "Weekly"
+    case monthly = "Monthly"
 }
