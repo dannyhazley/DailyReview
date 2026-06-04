@@ -27,6 +27,8 @@ struct SectionView: View {
             Divider()
         }.padding()
     }
+    
+    
 }
 
 #Preview {

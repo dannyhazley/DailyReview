@@ -37,10 +37,10 @@ struct ReviewField: Codable, Identifiable {
     let maxRows: Int?
     let value: String?
     let fields: [ReviewField]?
-    let columns: [TableColumn]?
+    let columns: [ReviewTableColumn]?
 }
 
-struct TableColumn: Codable, Identifiable {
+struct ReviewTableColumn: Codable, Identifiable {
     let id: String
     let label: String
     let type: FieldType
