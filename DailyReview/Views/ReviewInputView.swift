@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ReviewInputView: View {
+    @State private var formState = ReviewFormState()
+    
     let template: ReviewTemplate
     var body: some View {
         Text(template.name).font(Font.largeTitle)
@@ -15,10 +17,23 @@ struct ReviewInputView: View {
         ScrollView{
             VStack(alignment: .leading) {
                 ForEach(template.sections) { section in
-                    SectionView(section: section)
+                    SectionView(formState: $formState, section: section)
                 }
                 Button("SAVE"){
-                    
+                    do {
+                        let savedReview = makeSavedReview(template: template, formState: formState)
+
+                        let encoder = JSONEncoder()
+                        encoder.outputFormatting = [.prettyPrinted]
+                        encoder.dateEncodingStrategy = .iso8601
+
+                        let data = try encoder.encode(savedReview)
+                        let jsonString = String(data: data, encoding: .utf8)
+
+                        print(jsonString ?? "Failed to build JSON string")
+                    } catch {
+                        print("Encoding failed: \(error)")
+                    }
                 }.foregroundStyle(Color.red)
                     .font(Font.title2).bold()
                     .frame(maxWidth: .infinity, alignment: .trailing)
@@ -26,7 +41,16 @@ struct ReviewInputView: View {
         }
     }
     
-    
+    func makeSavedReview(template: ReviewTemplate, formState: ReviewFormState) -> SavedReview{
+        SavedReview(
+            templateId: template.id,
+            templateName: template.name,
+            savedAt: Date(),
+            textEntries: formState.textEntries,
+            tableEntries: formState.tableEntries,
+            groupEntries: formState.groupEntries
+        )
+    }
 }
 
 #Preview {

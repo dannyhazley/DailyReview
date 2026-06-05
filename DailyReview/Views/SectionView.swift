@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SectionView: View {
+    @Binding var formState: ReviewFormState
+    
     let section: ReviewSection
     
     var body: some View {
@@ -22,7 +24,8 @@ struct SectionView: View {
             
             
             ForEach(section.fields){ field in
-                FieldView(field: field).padding(EdgeInsets(top: 1, leading: 0, bottom: 1, trailing: 0))
+                FieldView(formState: $formState, field: field)
+                    .padding(EdgeInsets(top: 1, leading: 0, bottom: 1, trailing: 0))
             }
             Divider()
         }
@@ -31,6 +34,6 @@ struct SectionView: View {
     
 }
 
-#Preview {
-    SectionView(section: try! TemplateLoader.loadTemplate(named: "dailyReview").sections.first!)
-}
+//#Preview {
+//    SectionView(formState: $ReviewFormState(), section: try! TemplateLoader.loadTemplate(named: "dailyReview").sections.first!)
+//}

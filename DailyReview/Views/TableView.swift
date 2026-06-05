@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct TableView: View {
+    @Binding var entries: [TableEntry]
+    @State private var draftRow: [String: String] = [:]
     let field: ReviewField
-    let entries: [TableEntry]
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -60,20 +61,31 @@ struct TableView: View {
     func columnInput(including columns: [ReviewTableColumn]) -> some View{
         VStack{
             ForEach(columns) { column in
-                Constants.basicInput(for: column.label)
+                VStack(alignment: .leading){
+                    Constants.lblText(column.label)
+                    TextField(column.label, text: Binding(
+                        get: { draftRow[column.id] ?? "" },
+                        set: { draftRow[column.id] = $0 }
+                    ), axis: .vertical)
+                }
             }
-            Button("Add to Table"){
-                
-            }.frame(maxWidth: .infinity, alignment: .trailing)
+            Button("Add to Table") {
+                let rowValues = columns.map { column in
+                    draftRow[column.id]?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                }
+
+                guard rowValues.contains(where: { !$0.isEmpty }) else { return }
+
+                entries.append(TableEntry(id: UUID(), values: rowValues))
+                draftRow = [:]
+            }
+            .frame(maxWidth: .infinity, alignment: .trailing)
         }
     }
 }
 
-struct TableEntry: Identifiable {
-    let id = UUID()
-    let values: [String]
-}
 
-#Preview {
-    TableView(field: try! TemplateLoader.loadTemplate(named: "monthlyReview").sections[0].fields.first!, entries: [])
-}
+
+//#Preview {
+//    TableView(field: try! TemplateLoader.loadTemplate(named: "monthlyReview").sections[0].fields.first!, entries: [])
+//}
