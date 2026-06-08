@@ -11,13 +11,6 @@ struct MarkdownRenderingService {
     let input: SavedReview
     let template: ReviewTemplate
     let subIds: [String: RenderNode]
-    
-    var weekId: [String] {
-        let isoCalendar = Calendar(identifier: .iso8601)
-        let week = isoCalendar.component(.weekOfYear, from: input.savedAt)
-        let year = isoCalendar.component(.yearForWeekOfYear, from: input.savedAt)
-        return ["\(year)-W", String(format: "%02d", week)]
-    }
 
     func createHeading(_ depth: Int, with heading: String) -> String {
         "\(String(repeating: "#", count: depth)) \(heading)\n"
