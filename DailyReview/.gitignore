@@ -53,3 +53,5 @@ playground.xcworkspace
 # App files
 
 JsonTemplates/
+PersonalData/
+SampleJSON/

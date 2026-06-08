@@ -20,20 +20,10 @@ struct ReviewInputView: View {
                     SectionView(formState: $formState, section: section)
                 }
                 Button("SAVE"){
-                    do {
-                        let savedReview = makeSavedReview(template: template, formState: formState)
-
-                        let encoder = JSONEncoder()
-                        encoder.outputFormatting = [.prettyPrinted]
-                        encoder.dateEncodingStrategy = .iso8601
-
-                        let data = try encoder.encode(savedReview)
-                        let jsonString = String(data: data, encoding: .utf8)
-
-                        print(jsonString ?? "Failed to build JSON string")
-                    } catch {
-                        print("Encoding failed: \(error)")
-                    }
+                    let savedReview = makeSavedReview(template: template, formState: formState)
+//                    writeToJSON(savedReview: savedReview)
+                    let md = RenderDailyMd(input: savedReview, template: template).render()
+                    print(md)
                 }.foregroundStyle(Color.red)
                     .font(Font.title2).bold()
                     .frame(maxWidth: .infinity, alignment: .trailing)
@@ -50,6 +40,21 @@ struct ReviewInputView: View {
             tableEntries: formState.tableEntries,
             groupEntries: formState.groupEntries
         )
+    }
+    
+    func writeToJSON(savedReview: SavedReview){
+        do {
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.prettyPrinted]
+            encoder.dateEncodingStrategy = .iso8601
+
+            let data = try encoder.encode(savedReview)
+            let jsonString = String(data: data, encoding: .utf8)
+
+            print(jsonString ?? "Failed to build JSON string")
+        } catch {
+            print("Encoding failed: \(error)")
+        }
     }
 }
 
