@@ -6,8 +6,12 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct LandingScreenView: View {
+    @State private var isChoosingFolder = false
+    @State private var folderPickerReviewType: ReviewType?
+    
     let reviewTypes = ReviewType.allCases
 
     var body: some View {
@@ -20,22 +24,55 @@ struct LandingScreenView: View {
             Spacer()
 
             ForEach(reviewTypes, id: \.self) { reviewType in
-                NavigationLink("\(reviewType.rawValue) Review") {
-                    if let template = try? TemplateLoader.loadTemplate(named: reviewType.templateName) {
-                        ReviewInputView(template: template)
-                    } else {
-                        Text("Failed to load \(reviewType.rawValue.lowercased()) review template.")
-                            .foregroundStyle(.red)
+                VStack{
+                    NavigationLink("\(reviewType.rawValue) Review") {
+                        if let template = try? TemplateLoader.loadTemplate(named: reviewType.templateName) {
+                            ReviewInputView(template: template)
+                        } else {
+                            Text("Failed to load \(reviewType.rawValue.lowercased()) review template.")
+                                .foregroundStyle(.red)
+                        }
+                    }
+                    .font(.title)
+                    
+                    Button("Choose \(reviewType.rawValue) Folder"){
+                        folderPickerReviewType = reviewType
+                        isChoosingFolder = true
                     }
                 }
-                .font(.title)
                 .padding()
             }
 
             Spacer()
         }
         .padding()
+        .fileImporter(
+            isPresented: $isChoosingFolder,
+            allowedContentTypes: [.folder],
+            allowsMultipleSelection: false
+        ) { result in
+            guard let reviewType = folderPickerReviewType else {
+                    print("No review type")
+                    return
+                }
+            
+            switch result {
+            case.success(let urls):
+                guard let folderURL = urls.first else {
+                    print("No folder selected")
+                    return
+                }
+                
+                FileIO.saveFolder(folderURL, for: reviewType)
+            case .failure(let error):
+                print("Failed to choose folder: \(error)")
+            }
+
+            folderPickerReviewType = nil
+        }
     }
+    
+    
 }
 
 #Preview {
@@ -57,6 +94,17 @@ enum ReviewType: String, CaseIterable {
             return "weeklyReview"
         case .monthly:
             return "monthlyReview"
+        }
+    }
+    
+    var folderBookmarkKey: String {
+        switch self {
+        case .daily:
+            return "dailyReviewOutputFolderBookmark"
+        case .weekly:
+            return "weeklyReviewOutputFolderBookmark"
+        case .monthly:
+            return "monthlyReviewOutputFolderBookmark"
         }
     }
 }

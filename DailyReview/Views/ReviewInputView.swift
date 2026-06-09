@@ -22,20 +22,8 @@ struct ReviewInputView: View {
                 Button("SAVE"){
                     let savedReview = makeSavedReview(template: template, formState: formState)
 //                    writeToJSON(savedReview: savedReview)
-                    
-                    var md: String
-                    
-                    switch(template.id){
-                    case("daily-work-note"):
-                        md = DailyMarkdownRenderer(input: savedReview, template: template).render()
-                    case("weekly-work-note"):
-                        md = WeeklyMarkdownRenderer(input: savedReview, template: template).render()
-                    case("monthly-work-review"):
-                        md = MonthlyMarkdownRenderer(input: savedReview, template: template).render()
-                    default: md = "ERROR"
-                    }
-                    
-                    print(md)
+                    let response = FileIO.writeMarkdown(from: savedReview, using: template)
+                    print(response)
                 }.foregroundStyle(Color.red)
                     .font(Font.title2).bold()
                     .frame(maxWidth: .infinity, alignment: .trailing)

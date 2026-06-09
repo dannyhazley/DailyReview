@@ -12,8 +12,8 @@ struct DailyMarkdownRenderer {
     let template: ReviewTemplate
     private var context: MarkdownDocumentContext { MarkdownDocumentContext(savedAt: input.savedAt) }
 
-    func render() -> String {
-        ReviewMarkdownRenderer(input: input, template: template, layout: layout).render()
+    func render() -> (markdown: String, filename: String) {
+        (ReviewMarkdownRenderer(input: input, template: template, layout: layout).render(), context.isoDate)
     }
 
     private var layout: ReviewMarkdownLayout {
