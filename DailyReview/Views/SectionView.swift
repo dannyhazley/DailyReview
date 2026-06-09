@@ -14,18 +14,18 @@ struct SectionView: View {
     
     var body: some View {
         VStack(alignment: .leading){
-            Text(section.title).font(Font.title)
-                .padding(EdgeInsets(top: 0, leading: 0, bottom: 1, trailing: 0))
+            Text(section.title).font(Constants.Typography.sectionTitle)
+                .padding(.bottom, Constants.Spacing.sectionTitleBottomPadding)
             
             if let description = section.description {
-                Text(description).font(Font.default.italic())
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 3, trailing: 0))
+                Text(description).font(Constants.Typography.sectionDescription)
+                    .padding(.bottom, Constants.Spacing.sectionDescriptionBottomPadding)
             }
             
             
             ForEach(section.fields){ field in
                 FieldView(formState: $formState, field: field)
-                    .padding(EdgeInsets(top: 1, leading: 0, bottom: 1, trailing: 0))
+                    .padding(.vertical, Constants.Spacing.fieldVerticalPadding)
             }
             Divider()
         }

@@ -17,9 +17,9 @@ struct LandingScreenView: View {
     var body: some View {
         VStack {
             Text("What do you want to Review?")
-                .font(.largeTitle.bold())
+                .font(Constants.Typography.landingTitle)
                 .multilineTextAlignment(.center)
-                .foregroundStyle(.red)
+                .foregroundStyle(Constants.Colors.accent)
 
             Spacer()
 
@@ -30,22 +30,22 @@ struct LandingScreenView: View {
                             ReviewInputView(template: template)
                         } else {
                             Text("Failed to load \(reviewType.rawValue.lowercased()) review template.")
-                                .foregroundStyle(.red)
+                                .foregroundStyle(Constants.Colors.error)
                         }
                     }
-                    .font(.title)
+                    .font(Constants.Typography.navigationLink)
                     
                     Button("Choose \(reviewType.rawValue) Folder"){
                         folderPickerReviewType = reviewType
                         isChoosingFolder = true
                     }
                 }
-                .padding()
+                .padding(Constants.Spacing.pagePadding)
             }
 
             Spacer()
         }
-        .padding()
+        .padding(Constants.Spacing.pagePadding)
         .fileImporter(
             isPresented: $isChoosingFolder,
             allowedContentTypes: [.folder],

@@ -9,25 +9,50 @@ import SwiftUI
 
 struct ReviewInputView: View {
     @State private var formState = ReviewFormState()
+    @State private var showSaveMessage = false
+    @State private var saveMessage = ""
+    @State private var saveSuccessful = false
+    @Environment(\.dismiss) private var dismiss
+
     
     let template: ReviewTemplate
     var body: some View {
-        Text(template.name).font(Font.largeTitle)
-        Divider().padding(.horizontal)
+        Text(template.name).font(Constants.Typography.reviewTitle)
+        Divider().padding(.horizontal, Constants.Spacing.reviewDividerHorizontalPadding)
         ScrollView{
             VStack(alignment: .leading) {
                 ForEach(template.sections) { section in
                     SectionView(formState: $formState, section: section)
                 }
-                Button("SAVE"){
+                Button("SAVE") {
                     let savedReview = makeSavedReview(template: template, formState: formState)
-//                    writeToJSON(savedReview: savedReview)
                     let response = FileIO.writeMarkdown(from: savedReview, using: template)
-                    print(response)
-                }.foregroundStyle(Color.red)
-                    .font(Font.title2).bold()
+                    
+                    if response == FileIO.badWrite{
+                        saveMessage = response
+                        saveSuccessful = false
+                    } else {
+                        saveMessage = "File Saved successfully"
+                        saveSuccessful = true
+                    }
+                    
+                    showSaveMessage = true
+                }.foregroundStyle(Constants.Colors.accent)
+                    .font(Constants.Typography.primaryAction)
                     .frame(maxWidth: .infinity, alignment: .trailing)
-            }.padding()
+            }.padding(Constants.Spacing.reviewContentPadding)
+        }.alert("Review Saved", isPresented: $showSaveMessage) {
+            if saveSuccessful {
+                Button("Ok") {
+                    dismiss()
+                }
+            }
+            else{
+                Button("Try Again", role: .cancel) { }
+            }
+            
+        } message: {
+            Text(saveMessage)
         }
     }
     
