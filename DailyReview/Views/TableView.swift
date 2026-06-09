@@ -14,11 +14,11 @@ struct TableView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Constants.lblText(field.label)
+            Constants.labelText(field.label)
 
             if let columns = field.columns {
                 if entries.isEmpty {
-                    Constants.errorText("Please enter data into the fields below")
+                    Constants.errorText(Constants.Text.emptyTablePrompt)
                 } else {
                     table(columns, with: entries)
                 }
@@ -27,7 +27,7 @@ struct TableView: View {
                     columnInput(including: columns)
                 }
             } else {
-                Constants.errorText("Table configuration error: no columns supplied.")
+                Constants.errorText(Constants.Text.missingTableColumns)
             }
         }
     }
@@ -38,9 +38,9 @@ struct TableView: View {
                 HStack{
                     ForEach(columns) { column in
                         Text(column.label)
-                            .font(.subheadline)
-                            .foregroundStyle(.red)
-                            .frame(width: Constants.minColumnWidth, alignment: .leading)
+                            .font(Constants.Typography.tableHeader)
+                            .foregroundStyle(Constants.Colors.accent)
+                            .frame(width: Constants.Layout.minColumnWidth, alignment: .leading)
                     }
                 }
                 Divider()
@@ -49,7 +49,7 @@ struct TableView: View {
                     HStack{
                         ForEach(Array(columns.enumerated()), id: \.offset) { idx, col in
                             Text(row.values.indices.contains(idx) ? row.values[idx] : "")
-                                .frame(width: Constants.minColumnWidth, alignment: .leading)
+                                .frame(width: Constants.Layout.minColumnWidth, alignment: .leading)
                         }
                     }
                 }
@@ -62,7 +62,7 @@ struct TableView: View {
         VStack{
             ForEach(columns) { column in
                 VStack(alignment: .leading){
-                    Constants.lblText(column.label)
+                    Constants.labelText(column.label)
                     TextField(column.label, text: Binding(
                         get: { draftRow[column.id] ?? "" },
                         set: { draftRow[column.id] = $0 }

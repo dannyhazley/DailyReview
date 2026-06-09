@@ -14,8 +14,8 @@ struct TextListInputView: View {
     let prefix: String?
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 4){
-            Constants.lblText(field.label)
+        VStack(alignment: .leading, spacing: Constants.Spacing.listInputSpacing){
+            Constants.labelText(field.label)
             
             ScrollView(.vertical){
                 VStack(alignment: .leading){
@@ -25,7 +25,7 @@ struct TextListInputView: View {
                     }
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 
-            }.frame(maxHeight: Constants.rowHeight * CGFloat(Constants.maxVisibleRows) * 2)
+            }.frame(maxHeight: Constants.Layout.maxScrollableListHeight)
             
             if entries.count < (field.maxItems ?? Int.max) {
                 TextField(field.label, text: $draft, axis: .vertical)

@@ -19,7 +19,7 @@ struct NestedInputView: View {
 
     var body: some View {
         VStack(alignment: .leading){
-            Constants.lblText(field.label)
+            Constants.labelText(field.label)
             
             if let subfields = field.fields, !subfields.isEmpty {
                 VStack(alignment: .leading){
@@ -48,7 +48,7 @@ struct NestedInputView: View {
                 }
             }
             else {
-                Constants.errorText("No subfields found")
+                Constants.errorText(Constants.Text.noSubfieldsFound)
             }
         }
         
@@ -85,7 +85,7 @@ struct DraftGroupEntryRow: View {
             return firstValue
         }
 
-        return "Untitled Entry"
+        return Constants.Text.untitledEntry
     }
 
     private func finishDraft() {
@@ -107,11 +107,12 @@ struct DraftGroupEntryRow: View {
                 HStack {
                     Text(summaryText)
                     Spacer()
-                    Image(systemName: "chevron.down").foregroundStyle(.secondary)
+                    Image(systemName: Constants.Symbols.expandedChevron)
+                        .foregroundStyle(Constants.Colors.secondary)
                 }
             }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
+            .padding(.vertical, Constants.Spacing.groupRowVerticalPadding)
+            .padding(.horizontal, Constants.Spacing.groupRowHorizontalPadding)
         }
         .buttonStyle(.plain)
 
@@ -125,7 +126,7 @@ struct DraftGroupEntryRow: View {
                     )
                 )
             }
-        }.padding(.leading, 20)
+        }.padding(.leading, Constants.Spacing.nestedContentLeadingPadding)
     }
 }
 
@@ -141,7 +142,7 @@ struct GroupEntryRow: View{
     
     private var summaryText: String{
         guard let primarySubfieldID else {
-            return "Untitled Entry"
+            return Constants.Text.untitledEntry
         }
         
         let firstValue = entry.values[primarySubfieldID]?.first?.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -150,7 +151,7 @@ struct GroupEntryRow: View{
             return firstValue
         }
         
-        return "Untitled Entry"
+        return Constants.Text.untitledEntry
     }
     
     var body: some View{
@@ -161,11 +162,12 @@ struct GroupEntryRow: View{
                 HStack {
                     Text(summaryText)
                     Spacer()
-                    Image(systemName: isExpanded ? "chevron.down" : "chevron.right").foregroundStyle(.secondary)
+                    Image(systemName: isExpanded ? Constants.Symbols.expandedChevron : Constants.Symbols.collapsedChevron)
+                        .foregroundStyle(Constants.Colors.secondary)
                 }
             }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
+            .padding(.vertical, Constants.Spacing.groupRowVerticalPadding)
+            .padding(.horizontal, Constants.Spacing.groupRowHorizontalPadding)
         }
         .buttonStyle(.plain)
         
@@ -180,7 +182,7 @@ struct GroupEntryRow: View{
                         )
                     )
                 }
-            }.padding(.leading, 20)
+            }.padding(.leading, Constants.Spacing.nestedContentLeadingPadding)
         }
     }
 }
@@ -196,7 +198,7 @@ struct SubfieldListEditor: View{
     
     var body: some View{
         VStack(alignment: .leading){
-            Constants.lblText(field.label)
+            Constants.labelText(field.label)
             
             ScrollView(.vertical){
                 VStack(alignment: .leading){
@@ -205,7 +207,7 @@ struct SubfieldListEditor: View{
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
-            }.frame(maxHeight: Constants.rowHeight * CGFloat(Constants.maxVisibleRows) * 2)
+            }.frame(maxHeight: Constants.Layout.maxScrollableListHeight)
             
             if isPrimaryField {
                 TextField(
